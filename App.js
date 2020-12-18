@@ -11,17 +11,23 @@ class App extends Component {
 
   componentDidMount() {
     const apiMovie = 'http://www.omdbapi.com/?s=avenger&apikey=997061b4&';
-    Axios.get(apiMovie).then((res) => {
-      const responseMovie = res.data;
-      this.setState({
-        responseMovie,
-        listMovie: responseMovie.Search,
-      });
-    });
+    this.fetchApi(apiMovie);
   }
 
+  fetchApi = async (url) => {
+    const response = await Axios.get(url);
+
+    if (response.data.Response) {
+      this.setState({
+        responseMovie: response.data,
+        listMovie: response.data.Search,
+      });
+    } else {
+      console.log('failed request response');
+    }
+  };
+
   render() {
-    console.log('data', this.state.listMovie);
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Daftar Film</Text>
